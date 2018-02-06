@@ -35,7 +35,7 @@ def getMovies(category, location):
 	"""
 	return a list of Movie objects with the given category and location.
 	"""
-	html = expanddouban.getHtml(getMovieUrl(category, location))
+	html = expanddouban.getHtml(getMovieUrl(category, location), True)
 	soup = BeautifulSoup(html, "html.parser")
 	#find the movie list in soup
 	list_div = soup.find(attrs={'data-v-3e982be2':''}).find(class_="list-wp")
