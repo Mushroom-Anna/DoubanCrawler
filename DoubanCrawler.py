@@ -7,7 +7,7 @@ import codecs
 return a string corresponding to the URL of douban movie lists given category and location.
 """
 def getMovieUrl(category, location):
-	url = urljoin('https://movie.douban.com','tag/#/?tags={},{}'.format(category,location))
+	url = urljoin('https://movie.douban.com','tag/#/?sort=S&range=9,10&tags={},{}'.format(category,location))
 	return url
 
 class Movie(object):
@@ -37,10 +37,10 @@ def getMovies(category, location):
 	"""
 	html = expanddouban.getHtml(getMovieUrl(category, location))
 	soup = BeautifulSoup(html, "html.parser")
-	"""find the movie list in soup"""
+	#find the movie list in soup
 	list_div = soup.find(attrs={'data-v-3e982be2':''}).find(class_="list-wp")
 	items = list_div.find_all(class_="item")
-	"""get data of each movie"""
+	#get data of each movie
 	for item in items:
 		name = item.p.find(class_='title').get_text().strip()
 		rate = item.p.find(class_='rate').get_text().strip()
@@ -49,7 +49,7 @@ def getMovies(category, location):
 		movies.append(Movie(name, rate, category, location, page_link, img_link))
 	return movies
 
-"""write movies into csv"""
+#write movies into csv
 movies = getMovies("电影","日本")
 with open('movies.csv', 'w', encoding='gb18030') as csvfile:
 	#configure writer to write standard csv file
