@@ -1,5 +1,6 @@
 from urllib.parse import urljoin
 import expanddouban
+from bs4 import BeautifulSoup
 """
 return a string corresponding to the URL of douban movie lists given category and location.
 """
@@ -9,8 +10,6 @@ def getMovieUrl(category, location):
 
 """get html from url"""
 url = getMovieUrl("电影","日本")
-print(url)
-html = expanddouban.getHtml(url)
 
 class Movie(object):
 	"""
@@ -31,3 +30,15 @@ class Movie(object):
 		self.location = location
 		self.page_link = page_link
 		self.post_link = post_link
+
+
+def getMovies(category, location):
+	"""
+	return a list of Movie objects with the given category and location.
+	"""
+	html = expanddouban.getHtml(getMovieUrl(category, location))
+	soup = BeautifulSoup(html, "html.parser")
+	"""find the movie list in soup"""
+	data_div = soup.find(attrs={'data-v-3e982be2':''})
+	list_div = data_div.find(class_="list-wp")
+	return []
