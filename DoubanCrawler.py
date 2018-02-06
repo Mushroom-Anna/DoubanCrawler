@@ -8,9 +8,6 @@ def getMovieUrl(category, location):
 	url = urljoin('https://movie.douban.com','tag/#/?tags={},{}'.format(category,location))
 	return url
 
-"""get html from url"""
-url = getMovieUrl("电影","日本")
-
 class Movie(object):
 	"""
 	Movie class contains:
@@ -21,16 +18,15 @@ class Movie(object):
 	category = ""
 	location = ""
 	page_link = ""
-	post_link = ""
-	def __init__(self, name, rate, category, location, page_link, post_link):
+	img_link = ""
+	def __init__(self, name, rate, category, location, page_link, img_link):
 		super(Movie, self).__init__()
 		self.name = name
 		self.rate = rate
 		self.category = category
 		self.location = location
 		self.page_link = page_link
-		self.post_link = post_link
-
+		self.img_link = img_link
 
 def getMovies(category, location):
 	"""
@@ -39,6 +35,11 @@ def getMovies(category, location):
 	html = expanddouban.getHtml(getMovieUrl(category, location))
 	soup = BeautifulSoup(html, "html.parser")
 	"""find the movie list in soup"""
-	data_div = soup.find(attrs={'data-v-3e982be2':''})
-	list_div = data_div.find(class_="list-wp")
+	list_div = soup.find(attrs={'data-v-3e982be2':''}).find(class_="list-wp")
+	items = list_div.find_all(class_="item")
+	for item in items:
+		name = item.p.find(class_='title').get_text().strip()
+		rate = item.p.find(class_='rate').get_text().strip()
+		page_link = item.get('href')
+		img_link = item.find(class_="pic").img.get('src')
 	return []
