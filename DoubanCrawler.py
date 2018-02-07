@@ -3,6 +3,7 @@ import expanddouban
 from bs4 import BeautifulSoup
 import csv
 import codecs
+import json
 """
 return a string corresponding to the URL of douban movie lists given category and location.
 """
@@ -57,6 +58,21 @@ def writeIntoCvs(movies):
 		writer.writerow(['name', 'rate', 'category', 'location', 'page_link', 'img_link'])
 		for movie in movies:
 			writer.writerow([movie.name, movie.rate, movie.category, movie.location, movie.page_link, movie.img_link])
+
+def getMovieDict(movies):
+	"""
+	get numbers of movies in different locations
+	return sorted dictionary
+	"""
+	location_dict = {}
+	for movie in movies:
+		if movie.location in location_dict:
+			location_dict[movie.location] += 1
+		else:
+			location_dict[movie.location] = 1
+	location_dict_sorted = sorted(location_dict.items(), key=lambda e:e[1], reverse=True)
+	return location_dict_sorted
+
 #get movies in categories and locations
 movies = []
 categories = ["剧情","喜剧","悬疑"]
@@ -65,3 +81,5 @@ for category in categories:
 	for location in locations:
 		movies.extend(getMovies(category,location))
 writeIntoCvs(movies)
+#get dictionary
+location_dict_sorted = getMovieDict(movies)
