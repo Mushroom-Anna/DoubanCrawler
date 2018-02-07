@@ -7,7 +7,7 @@ import codecs
 return a string corresponding to the URL of douban movie lists given category and location.
 """
 def getMovieUrl(category, location):
-	url = urljoin('https://movie.douban.com','tag/#/?sort=S&range=9,10&tags={},{}'.format(category,location))
+	url = 'https://movie.douban.com/tag/#/?sort=S&range=9,10&tags={},{}'.format(category,location)
 	return url
 
 class Movie(object):
