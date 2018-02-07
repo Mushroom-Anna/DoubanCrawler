@@ -52,8 +52,16 @@ def getMovies(category, location):
 def writeIntoCvs(movies):
 	"""write movies list into csv"""
 	with open('movies.csv', 'w', encoding='gb18030') as csvfile:
-	#configure writer to write standard csv file
-	writer = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
-	writer.writerow(['name', 'rate', 'category', 'location', 'page_link', 'img_link'])
-	for movie in movies:
-		writer.writerow([movie.name, movie.rate, movie.category, movie.location, movie.page_link, movie.img_link])
+		#configure writer to write standard csv file
+		writer = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
+		writer.writerow(['name', 'rate', 'category', 'location', 'page_link', 'img_link'])
+		for movie in movies:
+			writer.writerow([movie.name, movie.rate, movie.category, movie.location, movie.page_link, movie.img_link])
+#get movies in categories and locations
+movies = []
+categories = ["剧情","喜剧","悬疑"]
+locations = ["大陆","美国","香港","台湾","日本","韩国","英国","法国","德国","意大利","西班牙","印度","泰国","俄罗斯","伊朗","加拿大","澳大利亚","爱尔兰","瑞典","巴西","丹麦"]
+for category in categories:
+	for location in locations:
+		movies.extend(getMovies(category,location))
+writeIntoCvs(movies)
