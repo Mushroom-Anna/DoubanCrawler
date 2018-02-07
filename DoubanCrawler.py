@@ -51,9 +51,9 @@ def getMovies(category, location):
 
 def writeIntoCvs(movies):
 	"""write movies list into csv"""
-	with open('movies.csv', 'w', encoding='gb18030') as csvfile:
+	with codecs.open('movies.csv', 'w', encoding='utf-8-sig') as csvfile:
 		#configure writer to write standard csv file
-		writer = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
+		writer = csv.writer(csvfile)
 		writer.writerow(['name', 'rate', 'category', 'location', 'page_link', 'img_link'])
 		for movie in movies:
 			writer.writerow([movie.name, movie.rate, movie.category, movie.location, movie.page_link, movie.img_link])
