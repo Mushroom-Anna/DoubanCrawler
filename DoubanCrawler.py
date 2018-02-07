@@ -49,9 +49,9 @@ def getMovies(category, location):
 		movies.append(Movie(name, rate, category, location, page_link, img_link))
 	return movies
 
-#write movies into csv
-movies = getMovies("电影","日本")
-with open('movies.csv', 'w', encoding='gb18030') as csvfile:
+def writeIntoCvs(movies):
+	"""write movies list into csv"""
+	with open('movies.csv', 'w', encoding='gb18030') as csvfile:
 	#configure writer to write standard csv file
 	writer = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
 	writer.writerow(['name', 'rate', 'category', 'location', 'page_link', 'img_link'])
