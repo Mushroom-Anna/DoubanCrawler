@@ -82,4 +82,11 @@ for category in categories:
 		movies.extend(getMovies(category,location))
 writeIntoCvs(movies)
 #get dictionary
+count = 0
 location_dict_sorted = getMovieDict(movies)
+with open('output.txt','w') as txtfile:
+	for location in location_dict_sorted:
+		count += 1
+		txtfile.write(json.dumps(location[0], ensure_ascii=False))
+		if count == 3:
+			break
