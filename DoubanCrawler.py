@@ -64,14 +64,17 @@ def getMovieDict(movies):
 	get numbers of movies in different locations
 	return sorted dictionary
 	"""
-	location_dict = {}
+	category_dict = {}
 	for movie in movies:
-		if movie.location in location_dict:
-			location_dict[movie.location] += 1
+		if movie.category in category_dict:
+			if movie.location in category_dict[movie.category]:
+				category_dict[movie.category][movie.location] += 1
+			else:
+				category_dict[movie.category][movie.location] = 1
 		else:
-			location_dict[movie.location] = 1
-	location_dict_sorted = sorted(location_dict.items(), key=lambda e:e[1], reverse=True)
-	return location_dict_sorted
+			category_dict[movie.category] = {movie.location:1}
+	category_dict_sorted = sorted(category_dict.items(), key=lambda e:e[1], reverse=True)
+	return category_dict_sorted
 
 #get movies in categories and locations
 movies = []
@@ -83,10 +86,10 @@ for category in categories:
 writeIntoCvs(movies)
 #get dictionary
 count = 0
-location_dict_sorted = getMovieDict(movies)
+category_dict_sorted = getMovieDict(movies)
 with open('output.txt','w') as txtfile:
-	for location in location_dict_sorted:
+	for category in category_dict_sorted:
 		count += 1
-		txtfile.write(json.dumps(location[0], ensure_ascii=False))
+		txtfile.write(json.dumps(category, ensure_ascii=False))
 		if count == 3:
 			break
