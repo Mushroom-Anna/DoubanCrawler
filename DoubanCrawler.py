@@ -59,37 +59,43 @@ def writeIntoCvs(movies):
 		for movie in movies:
 			writer.writerow([movie.name, movie.rate, movie.category, movie.location, movie.page_link, movie.img_link])
 
-def getMovieDict(movies):
+def getMovieDict(movies, category):
 	"""
 	get numbers of movies in different locations
-	return sorted dictionary
+	return sorted dictionary and the total number
 	"""
-	category_dict = {}
+	location_dict = {}
+	total = 0
 	for movie in movies:
-		if movie.category in category_dict:
-			if movie.location in category_dict[movie.category]:
-				category_dict[movie.category][movie.location] += 1
+		if movie.category == category:
+			total += 1
+			if movie.location in location_dict:
+				location_dict[movie.location] += 1 
 			else:
-				category_dict[movie.category][movie.location] = 1
-		else:
-			category_dict[movie.category] = {movie.location:1}
-	category_dict_sorted = sorted(category_dict.items(), key=lambda e:e[1], reverse=True)
-	return category_dict_sorted
+				location_dict[movie.location] = 1 
+	location_dict_sorted = sorted(location_dict.items(), key=lambda e:e[1], reverse=True)
+	return location_dict_sorted, total
 
 #get movies in categories and locations
 movies = []
-categories = ["剧情","喜剧","悬疑"]
+categories = ["青春","音乐","家庭"]
 locations = ["大陆","美国","香港","台湾","日本","韩国","英国","法国","德国","意大利","西班牙","印度","泰国","俄罗斯","伊朗","加拿大","澳大利亚","爱尔兰","瑞典","巴西","丹麦"]
 for category in categories:
 	for location in locations:
 		movies.extend(getMovies(category,location))
 writeIntoCvs(movies)
-#get dictionary
-count = 0
-category_dict_sorted = getMovieDict(movies)
+
+#get dictionaries of three categories and total number of each category
+category_dict = []
+total_list = []
+for category in categories:
+	dic, total = getMovieDict(movies,category)
+	category_dict.append(dic)
+	total_list.append(total)
+#write output into txt
 with open('output.txt','w') as txtfile:
-	for category in category_dict_sorted:
-		count += 1
-		txtfile.write(json.dumps(category, ensure_ascii=False))
-		if count == 3:
-			break
+	for i in range(len(category_dict)):
+		txtfile.write(categories[i]+'\n')
+		for j in range(3):
+			txtfile.write(json.dumps(category_dict[i][j], ensure_ascii=False))
+			txtfile.write(str(category_dict[i][j][1]/total_list[i])+'\n')
